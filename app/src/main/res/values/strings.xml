@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">NewsVision</string>
+
+    <!-- Search hint message -->
+    <string name="search_hint">Enter Search Query</string>
+
+    <!-- Search Button Text -->
+    <string name="button_text">Search!</string>
+
+    <!-- Search fragment ids -->
+    <string name="search_layout_id">search_layout_id</string>
+    <string name="search_bar_id">search_bar_id</string>
+    <string name="search_button_id">search_button_id</string>
+
+    <!-- Image resource names -->
+    <string name="default_image">preview_default</string>
+    <string name="no_preview">preview_no_image</string>
+
+    <!-- Action bar resources -->
+    <string name="button_full_article">Full Article</string>
+
+    <!-- DatePicker Dialog Text -->
+    <string name="date_picker_dialog_start">From</string>
+    <string name="date_picker_dialog_end">To</string>
+</resources>

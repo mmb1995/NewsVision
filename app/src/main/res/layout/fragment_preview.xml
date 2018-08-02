@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Displays a preview of a news article -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/default_padding"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Displays the headline of the news article -->
+        <TextView
+            android:id="@+id/headline_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/full_article_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_full_article"/>
+    </LinearLayout>
+
+    <!-- Displays an image associated with a particular news article -->
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/network_article_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/NetworkImageBackground"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop" />
+
+    <!-- Displays a snippet from the selected news article -->
+    <TextView
+        android:id="@+id/snippet_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/default_margin"
+        android:textSize="15sp"/>
+</LinearLayout>
+
