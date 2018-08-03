@@ -4,8 +4,9 @@
     <!-- Search hint message -->
     <string name="search_hint">Enter Search Query</string>
 
-    <!-- Search Button Text -->
-    <string name="button_text">Search!</string>
+    <!-- Action bar resources -->
+    <string name="action_search">Search!</string>
+    <string name="action_top_stories">Get Top Stories</string>
 
     <!-- Search fragment ids -->
     <string name="search_layout_id">search_layout_id</string>
@@ -22,4 +23,8 @@
     <!-- DatePicker Dialog Text -->
     <string name="date_picker_dialog_start">From</string>
     <string name="date_picker_dialog_end">To</string>
+
+    <!--WebView Text Resources -->
+    <string name="webview_close_message">Close</string>
+    <string name="webview_search">Search</string>
 </resources>

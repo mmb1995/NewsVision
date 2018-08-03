@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".NewsActivity">
+    android:layout_height="match_parent">
 
-    <!-- View to store a list of search results -->
-    <FrameLayout
-        android:id="@+id/news_results_container"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"/>
+    <!-- Creates the apps action bar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <!-- View to display an article preview or search bar -->
-    <FrameLayout
-        android:id="@+id/news_detail_container"
-        android:layout_width="0dp"
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:orientation="horizontal"
+        android:layout_below="@id/my_toolbar"
+        tools:context=".NewsActivity">
 
-</LinearLayout>
+        <!-- View to store a list of search results -->
+        <FrameLayout
+            android:id="@+id/news_results_container"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"/>
+
+        <!-- View to display an article preview or search bar -->
+        <FrameLayout
+            android:id="@+id/news_detail_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</RelativeLayout>
