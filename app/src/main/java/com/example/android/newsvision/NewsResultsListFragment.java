@@ -165,7 +165,6 @@ public class NewsResultsListFragment extends Fragment {
         if (mInstance.equals(TOP_STORIES)) {
             Log.d(TAG, "Getting Top Stories");
             getTopStoriesFromNyt(mQuery, mInstance, getActivity().getApplicationContext());
-            //mNewsList = NytSearchHelper.getNewsArticleList();
             if (mNewsList != null) {
                 Log.d(TAG, "obtained results from network request");
             } else {

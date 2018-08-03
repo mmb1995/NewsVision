@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
 import com.example.android.newsvision.utils.NewsSingleton;
@@ -13,11 +17,14 @@ import java.util.List;
 
 public class NewsActivity extends AppCompatActivity
     implements NewsResultsListFragment.OnArticleSelectedListener, SearchFragment.OnSearchListener,
-    PreviewFragment.OnFullArticleButtonListener, NewsResultsListFragment.OnArticleLongClickListener{
+    PreviewFragment.OnFullArticleButtonListener, NewsResultsListFragment.OnArticleLongClickListener,
+    WebViewModalFragment.OnWebViewClickListener {
 
     private static final String TOP_STORIES_TAG = "Top Stories";
     private static final String TAG = "NEWS_VISION";
-    private static final String WEBVIEW_FRAGMENT_TAG = "webview";
+    private static final String DETAIL_FRAGMENT_TAG = "detail";
+    private static final String RESULTS_LIST_TAG = "results";
+    private static final String DEFAULT_TOP_STORIES = "home";
 
     private List<NewsArticle> mNewsArticleList;
 
@@ -32,6 +39,8 @@ public class NewsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mToolbar);
 
         // Initialize a Request queue to handle network requests
         mRequestQueue = NewsSingleton.getInstance(this).getRequestQueue();
@@ -42,8 +51,8 @@ public class NewsActivity extends AppCompatActivity
 
         // Sets up default news list and search fragment
         FragmentTransaction initialTransaction = getSupportFragmentManager().beginTransaction();
-        initialTransaction.add(R.id.news_results_container, mResultsFrag, TOP_STORIES_TAG);
-        initialTransaction.add(R.id.news_detail_container, searchFragment);
+        initialTransaction.add(R.id.news_results_container, mResultsFrag, RESULTS_LIST_TAG);
+        initialTransaction.add(R.id.news_detail_container, searchFragment, DETAIL_FRAGMENT_TAG);
         initialTransaction.addToBackStack(null);
         initialTransaction.commit();
 
@@ -129,25 +138,10 @@ public class NewsActivity extends AppCompatActivity
      */
      public void displayFullArticle() {
         Log.d(TAG,"url to display: " + mUrl);
-        WebViewFragment webFrag = WebViewFragment.newInstance(mUrl);
-        FragmentTransaction webTransaction = getSupportFragmentManager().beginTransaction();
-        webTransaction.replace(R.id.news_detail_container, webFrag, WEBVIEW_FRAGMENT_TAG);
-        webTransaction.addToBackStack(null);
-        webTransaction.commit();
-    }
+        WebViewModalFragment webFrag = WebViewModalFragment.newInstance(mUrl);
 
-    @Override
-    public void onBackPressed() {
-        Fragment detailFrag = getSupportFragmentManager().findFragmentByTag(WEBVIEW_FRAGMENT_TAG);
-
-        // Checks if the detail container contains a WebViewFragment and if there are any webpages in
-        // its backstack
-        if (detailFrag instanceof WebViewFragment && ((WebViewFragment) detailFrag).canGoBack()) {
-            ((WebViewFragment) detailFrag).goBack();
-        } else {
-            // Use default behavior
-            super.onBackPressed();
-        }
+        webFrag.setUrl(mUrl);
+        webFrag.show(getSupportFragmentManager(),"WebViewModalFragment");
     }
 
     @Override
@@ -160,5 +154,60 @@ public class NewsActivity extends AppCompatActivity
 
         // Displays the full NewsArticle in a webview
         displayFullArticle();
+    }
+
+    @Override
+    public void onWebViewButtonClick() {
+        createSearchFragment();
+    }
+
+    private void createSearchFragment() {
+         SearchFragment searchFragment = new SearchFragment();
+         FragmentTransaction searchTransaction = getSupportFragmentManager().beginTransaction();
+         searchTransaction.replace(R.id.news_detail_container, searchFragment);
+         searchTransaction.addToBackStack(null);
+         searchTransaction.commit();
+     }
+
+    /**
+     * Called when the user Selects the Top Stories action button on the app bar. This updates the
+     * ui to display the top stories from the New York Times in the results list and updates the detail
+     * container to be empty
+     */
+    private void displayTopStories() {
+        NewsResultsListFragment topStoriesFrag = NewsResultsListFragment.topStoriesInstance(NewsResultsListFragment.TOP_STORIES,
+                DEFAULT_TOP_STORIES);
+        FragmentTransaction topStoriesTransaction = getSupportFragmentManager().beginTransaction();
+        topStoriesTransaction.replace(R.id.news_results_container, topStoriesFrag);
+        Fragment detailFrag = getSupportFragmentManager().findFragmentById(R.id.news_detail_container);
+
+        // checks if there is a fragment being displayed in the detail container
+        if (detailFrag != null) {
+            topStoriesTransaction.remove(detailFrag);
+        }
+        topStoriesTransaction.addToBackStack(null);
+        topStoriesTransaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+         // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                createSearchFragment();
+                return true;
+            case R.id.action_top_stories:
+                displayTopStories();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

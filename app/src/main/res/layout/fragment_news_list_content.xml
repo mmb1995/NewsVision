@@ -5,12 +5,14 @@
     android:padding="@dimen/default_padding"
     android:orientation="vertical">
 
+    <!-- TextView to display an articles headline -->
     <TextView
         android:id="@+id/news_headline_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"/>
 
+    <!-- TextView to display an articles date of publication -->
     <TextView
         android:id="@+id/news_date_tv"
         android:layout_width="wrap_content"
