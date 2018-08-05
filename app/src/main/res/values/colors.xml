@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="NetworkImageBackground">#000000</color>
+
+    <!-- Background color for list result fragment -->
+    <color name="resultsListBackground">#d3d3d3</color>
 </resources>

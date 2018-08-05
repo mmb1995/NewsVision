@@ -30,6 +30,13 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"/>
 
+        <!--Creates visual separation between list items-->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#dadada"
+            android:layout_toRightOf="@+id/news_list"/>
+
         <!-- View to display an article preview or search bar -->
         <FrameLayout
             android:id="@+id/news_detail_container"

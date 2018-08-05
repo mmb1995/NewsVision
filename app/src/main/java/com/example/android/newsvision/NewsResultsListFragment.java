@@ -146,6 +146,9 @@ public class NewsResultsListFragment extends Fragment {
 
         RecyclerView newsArticleRv = (RecyclerView) rootView.findViewById(R.id.news_list);
 
+        TextView listNameTv = (TextView) rootView.findViewById(R.id.list_name_tv);
+        listNameTv.setText(mInstance);
+
         newsArticleRv.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this.getActivity());

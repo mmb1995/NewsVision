@@ -10,6 +10,8 @@
         android:id="@+id/news_headline_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
         android:visibility="invisible"/>
 
     <!-- TextView to display an articles date of publication -->
@@ -25,7 +27,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#dadada"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:background="#dadada" />
 </LinearLayout>
