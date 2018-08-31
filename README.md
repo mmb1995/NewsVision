@@ -1,7 +1,7 @@
 # NewsVision
 
 A simple news app that allows users to search the New York Times for relevant news articles. The app is displayed in a two-pane
-layout and designed to be used with a phone in landscape orientation. This is not intended to be a fully functional news application.
+layout and is designed to be used with a device in landscape orientation. This is not intended to be a fully functional news application.
 
 ## User Stories/Objectives
 
@@ -21,7 +21,7 @@ layout and designed to be used with a phone in landscape orientation. This is no
 
 - NewsVision is currently only supported for a device in landscape orientation.
 - If a user long clicks on an article the full article will be automatically displayed in a pop-up.
-- When viewing a full article all page navigation is loaded inside of the WebView instead of in the devices browser.
+- When viewing a full article all page navigation is loaded inside of the WebView instead of in the device's browser.
 
 ## License
 
