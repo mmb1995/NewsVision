@@ -22,7 +22,7 @@ public class NewsUtils {
 
     private static final String API_KEY_PARAM = "api-key";
 
-    private static final String API_KEY_VALUE = "***REMOVED***";
+    private static final String API_KEY_VALUE = "";
 
     public static String buildNytTopStoriesUrl(String newsSearchQuery) {
 
