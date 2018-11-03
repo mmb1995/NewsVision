@@ -22,6 +22,7 @@ layout and is designed to be used with a device in landscape orientation. This i
 - NewsVision is currently only supported for a device in landscape orientation.
 - If a user long clicks on an article the full article will be automatically displayed in a pop-up.
 - When viewing a full article all page navigation is loaded inside of the WebView instead of in the device's browser.
+- You will need to sign up for an API key from the New York Times API and add your API key to the API_KEY_VALUE variable in the NewsUtils.java file.
 
 ## License
 
