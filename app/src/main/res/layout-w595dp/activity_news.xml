@@ -12,7 +12,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:layout_marginBottom="@dimen/default_margin"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
@@ -27,7 +26,7 @@
         <!-- View to store a list of search results -->
         <FrameLayout
             android:id="@+id/news_results_container"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="match_parent"/>
 
         <!--Creates visual separation between list items-->

@@ -1,4 +1,4 @@
-package com.example.android.newsvision;
+package com.example.android.newsvision.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.example.android.newsvision.R;
 
 public class WebViewModalFragment extends DialogFragment {
     OnWebViewClickListener mCallback;

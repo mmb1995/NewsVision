@@ -1,4 +1,4 @@
-package com.example.android.newsvision;
+package com.example.android.newsvision.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.android.newsvision.R;
+
 import java.util.Calendar;
 
 public class SearchFragment extends Fragment

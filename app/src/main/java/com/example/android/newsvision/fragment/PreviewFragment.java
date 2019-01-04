@@ -1,5 +1,7 @@
-package com.example.android.newsvision;
+package com.example.android.newsvision.fragment;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.example.android.newsvision.utils.NewsSingleton;
+import com.example.android.newsvision.NewsArticle;
+import com.example.android.newsvision.R;
+import com.example.android.newsvision.viewmodel.SelectedArticleViewModel;
+import com.squareup.picasso.Picasso;
 
 public class PreviewFragment extends Fragment {
     final static String ARG_POSITION = "position";
@@ -21,16 +25,10 @@ public class PreviewFragment extends Fragment {
     final static String ARG_IMAGE_URL = "imageUrl";
 
     private View rootView;
-    private NetworkImageView mArticleNetworkImageView;
+    private ImageView mArticleImageView;
     private TextView mHeadlinesView;
     private TextView mArticleSnippetView;
     private Button mFullArticleButton;
-
-    String mArticleHeadline;
-    String mArticleSnippet;
-    String mImageUrl;
-
-    ImageLoader mImageLoader;
 
     private OnFullArticleButtonListener mCallback;
 
@@ -50,21 +48,28 @@ public class PreviewFragment extends Fragment {
         return prevFragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SelectedArticleViewModel mSharedViewModel = ViewModelProviders.of(getActivity()).get(SelectedArticleViewModel.class);
+        mSharedViewModel.getSelectedArticle().observe(this, new Observer<NewsArticle>() {
+            @Override
+            public void onChanged(@Nullable NewsArticle article) {
+                if (article != null) {
+                    updatePreview(article);
+                }
+            }
+        });
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        // Checks to see if arguments were passed into the fragment
-        if (savedInstanceState != null) {
-            mArticleHeadline = savedInstanceState.getString(ARG_HEAD);
-            mArticleSnippet = savedInstanceState.getString(ARG_SNIPPET);
-            mImageUrl = savedInstanceState.getString(ARG_IMAGE_URL);
-        }
         rootView = inflater.inflate(R.layout.fragment_preview, container, false);
 
         // Gets references to member views
-        mArticleNetworkImageView = (NetworkImageView) rootView.findViewById(R.id.network_article_image_view);
+        mArticleImageView = (ImageView) rootView.findViewById(R.id.article_image_view);
         mHeadlinesView = (TextView) rootView.findViewById(R.id.headline_view);
         mArticleSnippetView = (TextView) rootView.findViewById(R.id.snippet_view);
 
@@ -83,7 +88,6 @@ public class PreviewFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mImageLoader = NewsSingleton.getInstance(context.getApplicationContext()).getImageLoader();
 
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception.
@@ -95,51 +99,31 @@ public class PreviewFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Checks to see if there have been any arguments passed into the fragment
-        Bundle args = getArguments();
-        if (args != null) {
-            mArticleHeadline = args.getString(ARG_HEAD);
-            mArticleSnippet = args.getString(ARG_SNIPPET);
-            mImageUrl = args.getString(ARG_IMAGE_URL);
-        }
-        updatePreview(mArticleHeadline, mArticleSnippet, mImageUrl);
-    }
-
-    public void updatePreview(String headline, String snippet, String imageUrl) {
+    /**
+     * Upadates the preview to display the currently selected article
+     * @param article the currently article selected by the user
+     */
+    public void updatePreview(NewsArticle article) {
         if (rootView != null) {
             // Sets the text for the article preview
-            mHeadlinesView.setText(headline);
-            mArticleSnippetView.setText(snippet);
+            mHeadlinesView.setText(article.headline);
+            mArticleSnippetView.setText(article.snippet);
 
             // Sets the image associated with the article or displays no preview image if none are
             // available
-            Context context = getActivity().getApplicationContext();
-            mImageLoader.get(imageUrl, ImageLoader.getImageListener(mArticleNetworkImageView,
-                    context.getResources().getIdentifier("preview_default", "drawable",
-                            context.getPackageName()), context.getResources().getIdentifier("preview_no_image",
-                            "drawable", context.getPackageName())));
-            mArticleNetworkImageView.setImageUrl(imageUrl, mImageLoader);
+            if (article.imageUrl == null || article.imageUrl.equals("")) {
+                Picasso.get()
+                        .load(R.drawable.preview_default)
+                        .into(mArticleImageView);
+            } else {
+                Picasso.get()
+                        .load(article.imageUrl)
+                        .error(R.drawable.preview_no_image)
+                        .placeholder(R.drawable.preview_default)
+                        .into(mArticleImageView);
+            }
         }
-        mArticleHeadline = headline;
-        mArticleSnippet = snippet;
-        mImageUrl = imageUrl;
+
     }
 
-    /**
-     * Saves the current position
-     * @param outState bundle that stores information for future states to access
-     */
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Save the current article selection in case we need to recreate the fragment
-        outState.putString(ARG_HEAD, mArticleHeadline);
-        outState.putString(ARG_SNIPPET, mArticleSnippet);
-        outState.putString(ARG_IMAGE_URL, mImageUrl);
-    }
 }

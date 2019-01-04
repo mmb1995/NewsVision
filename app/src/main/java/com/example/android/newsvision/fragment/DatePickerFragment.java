@@ -1,4 +1,4 @@
-package com.example.android.newsvision;
+package com.example.android.newsvision.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

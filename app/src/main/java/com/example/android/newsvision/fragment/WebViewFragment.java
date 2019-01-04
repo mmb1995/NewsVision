@@ -1,4 +1,4 @@
-package com.example.android.newsvision;
+package com.example.android.newsvision.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.example.android.newsvision.R;
 
 public class WebViewFragment extends Fragment {
     private final static String ARG_URL = "url";

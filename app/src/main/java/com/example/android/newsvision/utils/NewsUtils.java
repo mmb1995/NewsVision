@@ -4,25 +4,27 @@ import android.net.Uri;
 
 public class NewsUtils {
 
-    private static final String BASE_URL = "http://api.nytimes.com/svc/";
+    public static final String BASE_URL = "https://api.nytimes.com/svc/";
 
     private static final String TOP_STORIES_PARAM = "topstories/v2/%s.json?";
 
     private static final String ARTICLE_SEARCH_PARAM = "search/v2/articlesearch.json?";
 
-    private static final String QUERY_PARAM = "q";
+    public static final String QUERY_PARAM = "q";
 
-    private static final String ARG_BEGIN_DATE = "begin_date";
+    public static final String ARG_BEGIN_DATE = "begin_date";
 
-    private static final String ARG_END_DATE = "end_date";
+    public static final String ARG_END_DATE = "end_date";
 
-    private static final String SORT_PARAM = "sort";
+    public static final String SORT_PARAM = "sort";
 
-    private static final String SORT_VALUE = "newest";
+    public static final String SORT_VALUE = "newest";
 
-    private static final String API_KEY_PARAM = "api-key";
+    public static final String API_KEY_PARAM = "api-key";
 
-    private static final String API_KEY_VALUE = "";
+    public static final String API_KEY_VALUE = "";
+
+    public static final int MAX_IMAGE_WIDTH = 3000;
 
     public static String buildNytTopStoriesUrl(String newsSearchQuery) {
 

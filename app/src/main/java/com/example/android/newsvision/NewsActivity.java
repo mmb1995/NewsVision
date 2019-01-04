@@ -10,25 +10,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.android.volley.RequestQueue;
-import com.example.android.newsvision.utils.NewsSingleton;
-
-import java.util.List;
+import com.example.android.newsvision.fragment.NewsResultsListFragment;
+import com.example.android.newsvision.fragment.PreviewFragment;
+import com.example.android.newsvision.fragment.SearchFragment;
+import com.example.android.newsvision.fragment.WebViewModalFragment;
+import com.example.android.newsvision.interfaces.ArticleClickListener;
+import com.example.android.newsvision.viewmodel.SelectedArticleViewModel;
 
 public class NewsActivity extends AppCompatActivity
-    implements NewsResultsListFragment.OnArticleSelectedListener, SearchFragment.OnSearchListener,
-    PreviewFragment.OnFullArticleButtonListener, NewsResultsListFragment.OnArticleLongClickListener,
+    implements ArticleClickListener, SearchFragment.OnSearchListener,
+    PreviewFragment.OnFullArticleButtonListener,
     WebViewModalFragment.OnWebViewClickListener {
 
     private static final String TOP_STORIES_TAG = "Top Stories";
     private static final String TAG = "NEWS_VISION";
     private static final String DETAIL_FRAGMENT_TAG = "detail";
     private static final String RESULTS_LIST_TAG = "results";
-    private static final String DEFAULT_TOP_STORIES = "home";
-
-    private List<NewsArticle> mNewsArticleList;
-
-    public RequestQueue mRequestQueue;
+    private static final String DEFAULT_TOP_STORIES = "home.json";
+    ;
+    private SelectedArticleViewModel mSharedViewModel;
 
     private NewsResultsListFragment mResultsFrag;
     private PreviewFragment mPrevFrag;
@@ -42,19 +42,21 @@ public class NewsActivity extends AppCompatActivity
         Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
 
-        // Initialize a Request queue to handle network requests
-        mRequestQueue = NewsSingleton.getInstance(this).getRequestQueue();
-
-        // Creates a new instance of the news results list fragment;
-        NewsResultsListFragment mResultsFrag = NewsResultsListFragment.topStoriesInstance(NewsResultsListFragment.TOP_STORIES, "home");
-        SearchFragment searchFragment = new SearchFragment();
-
         // Sets up default news list and search fragment
-        FragmentTransaction initialTransaction = getSupportFragmentManager().beginTransaction();
-        initialTransaction.add(R.id.news_results_container, mResultsFrag, RESULTS_LIST_TAG);
-        initialTransaction.add(R.id.news_detail_container, searchFragment, DETAIL_FRAGMENT_TAG);
-        initialTransaction.addToBackStack(null);
-        initialTransaction.commit();
+        if (savedInstanceState == null) {
+            // Creates a new instance of the news results list fragment;
+            Bundle args = new Bundle();
+            args.putString(NewsResultsListFragment.ARG_TYPE, NewsResultsListFragment.TOP_STORIES);
+            args.putString(NewsResultsListFragment.ARG_QUERY, DEFAULT_TOP_STORIES);
+            mResultsFrag = new NewsResultsListFragment();
+            mResultsFrag.setArguments(args);
+            SearchFragment searchFragment = new SearchFragment();
+            FragmentTransaction initialTransaction = getSupportFragmentManager().beginTransaction();
+            initialTransaction.add(R.id.news_results_container, mResultsFrag, RESULTS_LIST_TAG);
+            initialTransaction.add(R.id.news_detail_container, searchFragment, DETAIL_FRAGMENT_TAG);
+            initialTransaction.addToBackStack(null);
+            initialTransaction.commit();
+        }
 
     }
 
@@ -64,7 +66,7 @@ public class NewsActivity extends AppCompatActivity
      * @param currentArticle the NewsArticle that was clicked on
      */
     @Override
-    public void onArticleSelected(NewsArticle currentArticle) {
+    public void onArticleClicked(NewsArticle currentArticle) {
         //Log.d(TAG,"clicked position:" + position);
 
         // Get the NewsArticle that was clicked on
@@ -95,18 +97,6 @@ public class NewsActivity extends AppCompatActivity
         mUrl = url;
     }
 
-    /**
-     * Gets the news article at the given position
-     * @param position the index of the selected news article
-     * @return The selected NewsArticle object or null if it doesn't exist
-     */
-    private NewsArticle getNewsArticle(int position) {
-        if (mNewsArticleList != null) {
-            return mNewsArticleList.get(position);
-        }
-        return null;
-    }
-
 
     /**
      * Implements the onSearch method specified for the OnSearchListener interface
@@ -115,8 +105,13 @@ public class NewsActivity extends AppCompatActivity
     @Override
     public void onSearch(String searchTerm, String beginDate, String endDate) {
        // Create a new search results instance and display it
-       NewsResultsListFragment mResultsFrag = NewsResultsListFragment.searchResultsInstance(NewsResultsListFragment.SEARCH_RESULTS,
-               searchTerm, beginDate, endDate);
+       Bundle args = new Bundle();
+       args.putString(NewsResultsListFragment.ARG_TYPE, NewsResultsListFragment.SEARCH_RESULTS);
+       args.putString(NewsResultsListFragment.ARG_QUERY, searchTerm);
+       args.putString(NewsResultsListFragment.ARG_BEGIN_DATE, beginDate);
+       args.putString(NewsResultsListFragment.ARG_END_DATE, endDate);
+       NewsResultsListFragment mResultsFrag =  new NewsResultsListFragment();
+       mResultsFrag.setArguments(args);
        FragmentTransaction searchResultsTransaction = getSupportFragmentManager().beginTransaction();
        searchResultsTransaction.replace(R.id.news_results_container, mResultsFrag);
        searchResultsTransaction.addToBackStack(null);
@@ -145,7 +140,7 @@ public class NewsActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnArticleLongClick(NewsArticle currentArticle) {
+    public void onArticleLongClick(NewsArticle currentArticle) {
         // Gets the news article that was clicked on
         //NewsArticle currentArticle = getNewsArticle(position);
 
@@ -175,10 +170,13 @@ public class NewsActivity extends AppCompatActivity
      * container to be empty
      */
     private void displayTopStories() {
-        NewsResultsListFragment topStoriesFrag = NewsResultsListFragment.topStoriesInstance(NewsResultsListFragment.TOP_STORIES,
-                DEFAULT_TOP_STORIES);
+        Bundle args = new Bundle();
+        args.putString(NewsResultsListFragment.ARG_TYPE, NewsResultsListFragment.TOP_STORIES);
+        args.putString(NewsResultsListFragment.ARG_QUERY, DEFAULT_TOP_STORIES);
+        NewsResultsListFragment mNewsResultsFrag = new NewsResultsListFragment();
+        mNewsResultsFrag.setArguments(args);
         FragmentTransaction topStoriesTransaction = getSupportFragmentManager().beginTransaction();
-        topStoriesTransaction.replace(R.id.news_results_container, topStoriesFrag);
+        topStoriesTransaction.replace(R.id.news_results_container, mNewsResultsFrag);
         Fragment detailFrag = getSupportFragmentManager().findFragmentById(R.id.news_detail_container);
 
         // checks if there is a fragment being displayed in the detail container
